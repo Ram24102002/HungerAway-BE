@@ -11,8 +11,15 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors({ origin: "http://localhost:5173" }));
-app.use(express.json());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://hungeraway-be.onrender.com"
+  ],
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  credentials: true
+}));
+
 
 
 app.get("/ping", (req, res) => {
