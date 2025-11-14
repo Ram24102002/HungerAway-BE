@@ -1,34 +1,25 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import foodRoutes from "./routes/foodRoutes.js";
 
-dotenv.config();
-const app = express();
 
-// DB
+dotenv.config();
+
+// Connect DB
 connectDB();
 
-// Middleware
-
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://hungeraway-be.onrender.com/"
-  ],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
-
-app.use(express.json());
-
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 
 
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
+
 
 
 // Routes
