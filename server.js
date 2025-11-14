@@ -14,6 +14,12 @@ connectDB();
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
+
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
+});
+
+
 // Routes
 app.use("/api/food-donations", foodRoutes);
 
