@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import foodRoutes from "./routes/foodRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 
 dotenv.config();
@@ -24,11 +25,27 @@ app.get("/ping", (req, res) => {
 
 // Routes
 app.use("/api/food-donations", foodRoutes);
+app.use("/api/contacts", contactRoutes);
 
 app.get("/", (req, res) => {
   res.send("✅ API is running...");
 });
 
+
+
 // Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000 || 3000;
+// app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+const server = app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.log(`❌ Port ${PORT} is already in use`);
+  } else {
+    console.error(err);
+  }
+});
+
