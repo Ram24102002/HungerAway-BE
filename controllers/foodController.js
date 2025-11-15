@@ -1,27 +1,40 @@
 import FoodDonation from "../models/foodModel.js";
 
+
 export const donateFood = async (req, res) => {
   try {
-    const { city, area, foodName, isPacked, edibleDays, durationType, phone, note } = req.body;
+    let { edibleDays, durationType } = req.body;
 
-    const newDonation = new FoodDonation({
-      city,
-      area,
-      foodName,
-      isPacked,
-      edibleDays,
-      durationType,
-      phone,
-      note
+    // Convert edibleDays to number safely
+    edibleDays = Number(edibleDays);
+
+    if (isNaN(edibleDays) || edibleDays <= 0) {
+      return res.status(400).json({ error: "Invalid edibleDays value" });
+    }
+
+    const deleteAfterMs =
+      durationType === "Hours"
+        ? edibleDays * 60 * 60 * 1000
+        : edibleDays * 24 * 60 * 60 * 1000;
+
+    const expiresAt = new Date(Date.now() + deleteAfterMs);
+
+    const donation = await FoodDonation.create({
+      ...req.body,
+      expiresAt
     });
 
-    await newDonation.save();
-    res.status(201).json({ message: "Food donation saved successfully" });
+    return res.status(201).json({
+      success: true,
+      donation
+    });
   } catch (error) {
-    console.error("🔥 Donation Save Error:", error.message);
-    res.status(500).json({ error: "Failed to save food donation" });
+    console.error("Error creating donation:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 };
+
+
 
 export const getFoodDonations = async (req, res) => {
   try {

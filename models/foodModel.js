@@ -9,7 +9,12 @@ const FoodDonationsSchema = new mongoose.Schema(
     edibleDays: { type: Number, required: true },
     durationType: { type: String, enum: ["Hours", "Days"], required: true },
     phone: { type: String, required: true },
-    note: { type: String }
+    note: { type: String },
+
+    expiresAt: {
+      type: Date,
+      index: { expires: 0 }, // TTL INDEX → auto delete when expiresAt time hits
+    },
   },
   { timestamps: true }
 );
