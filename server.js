@@ -6,6 +6,8 @@ import connectDB from "./config/db.js";
 import foodRoutes from "./routes/foodRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import volunteersRoutes from "./routes/volunteersRoutes.js"
+import foodRequestRoutes from "./routes/foodRequestRoutes.js";
+
 
 
 dotenv.config();
@@ -28,6 +30,7 @@ app.get("/ping", (req, res) => {
 app.use("/api/food-donations", foodRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/volunteers", volunteersRoutes);
+app.use("/api/requests", foodRequestRoutes)
 
 app.get("/", (req, res) => {
   res.send("✅ API is running...");
