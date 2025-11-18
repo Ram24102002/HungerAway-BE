@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', foodRequestController.createFoodRequest);
 router.get('/', foodRequestController.getAllFoodRequests);
+router.get('/phone/:phone', foodRequestController.getFoodRequestsByPhone); // Changed route
 router.get('/:id', foodRequestController.getFoodRequestById);
-router.get('/', foodRequestController.getFoodRequestsByPhone);
 
 export default router;

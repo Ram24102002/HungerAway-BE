@@ -5,10 +5,8 @@ import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import foodRoutes from "./routes/foodRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
-import volunteersRoutes from "./routes/volunteersRoutes.js"
+import volunteersRoutes from "./routes/volunteersRoutes.js";
 import foodRequestRoutes from "./routes/foodRequestRoutes.js";
-
-
 
 dotenv.config();
 
@@ -16,31 +14,22 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
 app.use(cors());
-app.use(bodyParser.json());
-
-
-app.get("/ping", (req, res) => {
-  res.status(200).send("pong");
-});
-
-
+app.use(express.json());  // Use this instead of bodyParser
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/food-donations", foodRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/volunteers", volunteersRoutes);
-app.use("/api/requests", foodRequestRoutes)
+app.use("/api/requests", foodRequestRoutes);
 
 app.get("/", (req, res) => {
   res.send("✅ API is running...");
 });
 
-
-
-// Start server
-const PORT = process.env.PORT || 5000 || 3000;
-// app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
@@ -53,4 +42,3 @@ server.on("error", (err) => {
     console.error(err);
   }
 });
-

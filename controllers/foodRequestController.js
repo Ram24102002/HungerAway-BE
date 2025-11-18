@@ -1,24 +1,38 @@
-// In foodRequestController.js
-const foodRequestController = {
+import mongoose from 'mongoose';
+import foodRequest from "../models/foodRequestModel.js";
+
+
+export const foodRequestController = {
     createFoodRequest: async (req, res) => {
         try {
+            console.log('Request body:', req.body);
             const {name, phone, donation} = req.body;
             
-            if (!mongoose.Types.ObjectId.isValid(donation._id)) {
+            const donationId = typeof donation === 'string' ? donation : donation._id;
+            
+            if (!mongoose.Types.ObjectId.isValid(donationId)) {
                 return res.status(400).json({message: "Invalid donation ID"});
             }
 
             const newFoodRequest = new foodRequest({
                 name,
                 phone,
-                donation: donation._id  // Store just the ID
+                donation: donationId
             });
 
             const savedRequest = await newFoodRequest.save();
-            res.status(201).json(savedRequest);
+            res.status(201).json({
+                success: true,
+                data: savedRequest
+            });
         }
         catch (error){
-            res.status(500).json({message: "Server Error: Unable to create food request."});
+            console.error('Error creating food request:', error);
+            res.status(500).json({
+                success: false,
+                message: "Server Error: Unable to create food request.",
+                error: error.message
+            });
         }
     },
      // Get all food requests
@@ -91,4 +105,3 @@ const foodRequestController = {
 };
 
 
-module.exports = { foodRequestController };
