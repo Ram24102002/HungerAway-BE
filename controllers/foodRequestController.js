@@ -89,3 +89,6 @@ const foodRequestController = {
         }
     }
 };
+
+
+module.exports = { foodRequestController };
