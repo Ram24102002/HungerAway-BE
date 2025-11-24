@@ -25,7 +25,11 @@ app.use("/api/contacts", contactRoutes);
 app.use("/api/volunteers", volunteersRoutes);
 app.use("/api/requests", foodRequestRoutes);
 
-app.get("/", (req, res) => {
+app.get('/ping', (req, res) => {
+  res.send('Pong');
+});
+
+app.get("/ApiIsRunning", (req, res) => {
   res.send("✅ API is running...");
 });
 

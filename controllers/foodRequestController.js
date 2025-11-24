@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import foodRequest from "../models/foodRequestModel.js";
+import foodRequestModel from "../models/foodRequestModel.js";
 
 
 export const foodRequestController = {
     createFoodRequest: async (req, res) => {
         try {
             console.log('Request body:', req.body);
-            const {name, phone, donation} = req.body;
+            const { name, phone, requestnote, donation } = req.body;
             
             const donationId = typeof donation === 'string' ? donation : donation._id;
             
@@ -14,9 +14,10 @@ export const foodRequestController = {
                 return res.status(400).json({message: "Invalid donation ID"});
             }
 
-            const newFoodRequest = new foodRequest({
+            const newFoodRequest = new foodRequestModel({
                 name,
                 phone,
+                requestnote,
                 donation: donationId
             });
 
@@ -37,29 +38,58 @@ export const foodRequestController = {
     },
      // Get all food requests
     getAllFoodRequests: async (req, res) => {
-        try {
-            const requests = await foodRequest.find()
-                .populate('donation')  // This will populate the donation details
-                .sort('-createdAt');  // Sort by newest first
-            
-            res.status(200).json({
-                success: true,
-                count: requests.length,
-                data: requests
-            });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                message: "Server Error: Unable to fetch food requests.",
-                error: error.message
-            });
-        }
-    },
+        console.log('→ getAllFoodRequests controller reached');
+    try {
+        // First try without populate to verify base data retrieval
+        const basicRequests = await foodRequestModel.find();
+        console.log('Basic requests without populate:', basicRequests);
+
+
+
+
+        // Check the collection name
+        console.log('Collection name:', foodRequestModel.collection.name);
+        
+        // Try a simpler query first
+        const count = await foodRequestModel.countDocuments();
+        console.log('Total documents:', count);
+        
+        // Check for any documents without conditions
+        const allDocs = await foodRequestModel.find({}).lean();
+        console.log('All documents:', allDocs);
+
+
+
+
+        // Then try with populate
+        const requests = await foodRequestModel.find()
+            .populate({
+                path: 'donation',
+                options: { strictPopulate: false } // This makes populate optional
+            })
+            .sort('-createdAt');
+        
+        console.log('Populated requests:', requests);
+
+        res.status(200).json({
+            success: true,
+            count: requests.length,
+            data: requests
+        });
+    } catch (error) {
+        console.error('Error in getAllFoodRequests:', error);
+        res.status(500).json({
+            success: false,
+            message: "Server Error: Unable to fetch food requests.",
+            error: error.message
+        });
+    }
+},
 
     // Get food request by ID
     getFoodRequestById: async (req, res) => {
         try {
-            const request = await foodRequest.findById(req.params.id)
+            const request = await foodRequestModel.findById(req.params.id)
                 .populate('donation');
 
             if (!request) {
@@ -85,7 +115,7 @@ export const foodRequestController = {
     // Get food requests by user phone number
     getFoodRequestsByPhone: async (req, res) => {
         try {
-            const requests = await foodRequest.find({ phone: req.params.phone })
+            const requests = await foodRequestModel.find({ phone: req.params.phone })
                 .populate('donation')
                 .sort('-createdAt');
 

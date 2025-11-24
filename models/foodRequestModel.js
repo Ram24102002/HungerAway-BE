@@ -4,13 +4,14 @@ const foodRequestSchema = new mongoose.Schema(
     {
         name: {type: String, required: true},
         phone: {type: String, required: true},
-        donation: {type: mongoose.Schema.Types.ObjectId, ref: "foodDonation", required: true},
+        requestnote: {type: String, required: false},
+        donation: {type: mongoose.Schema.Types.ObjectId, ref: "FoodDonations", required: true},
     },
     {
         timestamps:true
     }
 );
 
-const foodRequest = mongoose.model("foodRequest", foodRequestSchema);
+const foodRequestModel = mongoose.model("FoodRequest", foodRequestSchema);
 
-export default foodRequest;
+export default foodRequestModel;
