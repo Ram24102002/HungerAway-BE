@@ -24,3 +24,21 @@ export const getVolunteers = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch volunteers" });
   }
 };
+
+
+export const delVolunteers = async (req,res) => {
+        try {
+            const {id} = req.params;
+            const deleteRequest = await Volunteer.findByIdAndDelete(id);
+            if (!deleteRequest) {
+                return res.status(404).json({success: false, message: "Volunteer is not found"});
+            }
+            res.status(200).json({success: true, message: "Volunteer deleted successfully"});
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Server Error: Unable to delete Volunteer Details",
+                error: error.message
+            });
+        }
+    }

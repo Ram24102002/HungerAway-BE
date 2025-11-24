@@ -1,5 +1,5 @@
 import express from "express";
-import { createContact, getContacts } from "../controllers/contactController.js";
+import { createContact, DelContacts, getContacts } from "../controllers/contactController.js";
 
 const router = express.Router();
 
@@ -8,5 +8,7 @@ router.post("/", createContact);
 
 // GET - Retrieve all contact messages (for admin panel)
 router.get("/", getContacts);
+
+router.delete("/:id", DelContacts);
 
 export default router;

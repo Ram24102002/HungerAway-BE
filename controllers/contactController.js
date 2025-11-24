@@ -26,3 +26,21 @@ export const getContacts = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch contacts" });
   }
 };
+
+
+
+export const DelContacts = async (req,res) => {
+        try {
+            const {id} = req.params;
+            const deleteRequest = await Contact.findByIdAndDelete(id);
+            if (!deleteRequest) {
+                return res.status(404).json({success: false, message: "Email is not found"});
+            }
+            res.status(200).json({success: true, message: "Email deleted successfully"});
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Server Error: Unable to delete Email"
+            });
+        }
+    }

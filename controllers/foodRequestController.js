@@ -131,6 +131,22 @@ export const foodRequestController = {
                 error: error.message
             });
         }
+    },
+    delFoodRequests: async (req, res) => {
+        try {
+            const {id} = req.params;
+            const deleteRequest = await foodRequestModel.findByIdAndDelete(id);
+            if (!deleteRequest) {
+                return res.status(404).json({success: false, message: "Food request not found"});
+            }
+            res.status(200).json({success: true, message: "Food request deleted successfully"});
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                message: "Server Error: Unable to delete food request.",
+                error: error.message
+            });
+        }
     }
 };
 
