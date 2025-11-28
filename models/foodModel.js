@@ -10,6 +10,7 @@ const FoodDonationsSchema = new mongoose.Schema(
     durationType: { type: String, enum: ["Hours", "Days"], required: true },
     phone: { type: String, required: true },
     note: { type: String },
+    picked: {type: Boolean, default: false },
 
     expiresAt: {
       type: Date,

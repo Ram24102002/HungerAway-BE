@@ -8,6 +8,12 @@ import contactRoutes from "./routes/contactRoutes.js";
 import volunteersRoutes from "./routes/volunteersRoutes.js";
 import foodRequestRoutes from "./routes/foodRequestRoutes.js";
 
+// CRON
+import "./CRON/cronPicked.js"
+
+
+
+
 dotenv.config();
 
 // Connect DB

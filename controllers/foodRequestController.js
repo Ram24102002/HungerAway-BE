@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import foodRequestModel from "../models/foodRequestModel.js";
 
 
+
+
 export const foodRequestController = {
     createFoodRequest: async (req, res) => {
         try {
@@ -147,7 +149,26 @@ export const foodRequestController = {
                 error: error.message
             });
         }
+    },
+    updateRequestPicked : async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updated = await foodRequestModel.findByIdAndUpdate(
+      id,
+      { picked: req.body.picked }, // true
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Request not found" });
     }
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+}
 };
 
 
