@@ -1,4 +1,5 @@
 import FoodDonation from "../models/foodModel.js";
+import { applyCityFilter } from "../filters/cityFilter.js";
 
 
 export const donateFood = async (req, res) => {
@@ -38,7 +39,8 @@ export const donateFood = async (req, res) => {
 
 export const getFoodDonations = async (req, res) => {
   try {
-    const donations = await FoodDonation.find().sort({ createdAt: -1 });
+    const filter = applyCityFilter(req.query);
+    const donations = await FoodDonation.find(filter)
     res.status(200).json(donations);
     } catch (error) {
     console.error("🔥 Fetch Donations Error:", error.message)
