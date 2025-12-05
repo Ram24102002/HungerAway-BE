@@ -47,3 +47,24 @@ export const getFoodDonations = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch food donations" })
     }
 };
+
+
+export const updateDonation = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedDonation = await FoodDonation.findByIdAndUpdate(
+      id,
+      req.body,  // <-- REUSABLE for any field, including picked
+      { new: true }
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res.json({ success: true, donation: updatedDonation });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

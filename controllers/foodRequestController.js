@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import foodRequestModel from "../models/foodRequestModel.js";
+import FoodDonations from '../models/foodModel.js'
 
 
 
@@ -165,6 +166,23 @@ export const foodRequestController = {
     }
 
     res.json(updated);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+},
+markDonationPicked : async (req, res) => {
+  try {
+    const donation = await FoodDonations.findByIdAndUpdate(
+      req.params.id,
+      { picked: req.body.picked },
+      { new: true }
+    );
+
+    if (!donation) {
+      return res.status(404).json({ message: "Donation not found" });
+    }
+
+    res.json({ success: true, donation });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
